@@ -1,37 +1,37 @@
 const myLibrary = [];
 
-const addBookBtn = document.getElementById("addbook-btn");
-const cancelBookBtn = document.getElementById("cancel-btn");
-const modalAddBookBtn = document.getElementById("modal-addbook-btn");
-const deleteBookBtn = document.getElementById("delete-btn");
+const newBookBtn = document.getElementById("newbook-btn");
+const modalCancelBookBtn = document.getElementById("modal-cancel-btn");
+const hasReadCheckbox = document.getElementById("read")
 const readBtn = document.getElementById("read-btn");
+
 const modal = document.querySelector("dialog");  
 const form = document.querySelector("form");
-const libraryContainer = document.getElementById("library-container");
 const bookTitle = document.getElementById("title");
 const bookAuthor = document.getElementById("author");
 const numberOfPages = document.getElementById("pages")
 
-function Book(author, title, pages) {
+function Book(author, title, pages, hasRead) {
     this.author = author,
     this.title = title,
-    this.pages = pages
+    this.pages = pages,
+    this.hasRead = hasRead
 }
 
 Book.prototype.read = function() {
     //Toggle book's read status (done via button)
     //checked ? read : not read
-    const readBook = document.getElementById("read")
-
+    this.hasRead ? this.hasRead = false : this.hasRead = true;
+    renderBookList();
 }
     
 function addBookToLibrary(book) {
     myLibrary.push(book);
-    console.log(myLibrary);
     renderBookList();
 }
 
 function renderBookList() {
+    const libraryContainer = document.getElementById("library-container");
 
     if (libraryContainer.hasChildNodes()) {
         libraryContainer.innerHTML = "";
@@ -45,9 +45,10 @@ function renderBookList() {
                 <div>Book Title: ${book.title}</div>
                 <div>Book Author: ${book.author}</div>
                 <div>Number of pages: ${book.pages}</div>
+                <div>Has read this bool: ${book.hasRead}</div>
             </div>
             <div class="library-card-btns">
-                <button id="read-btn">Read</button>
+                <button id="read-btn" data-id=${i} onclick="readBook(event)">Read</button>
                 <button id="delete-btn" data-id=${i} onclick="deleteBook(event)">Delete</button>
             </div>
         </div>`
@@ -65,6 +66,14 @@ function deleteBook(e) {
     renderBookList();
 }
 
+function readBook(e) {
+  let id = e.target.dataset.id
+  let book = myLibrary[id];
+  book.read();
+}
+
+
+
 
 ///////////////////////////////
 //////EVENT LISTENERS//////////
@@ -72,21 +81,20 @@ function deleteBook(e) {
 
 form.addEventListener("submit", function(e) {
     e.preventDefault();
-    let book = new Book(bookTitle.value, bookAuthor.value, numberOfPages.value);
+
+    let hasRead;
+    hasReadCheckbox.checked ? hasRead = true : hasRead = false;
+    let book = new Book(bookTitle.value, bookAuthor.value, numberOfPages.value, hasRead);
     addBookToLibrary(book);
+    console.log(book);
     modal.close();
 })
 
-addBookBtn.addEventListener("click", function() {
+newBookBtn.addEventListener("click", function() {
     modal.showModal();
 })
 
-cancelBookBtn.addEventListener("click", function(e) {
+modalCancelBookBtn.addEventListener("click", function(e) {
     e.preventDefault();
     modal.close()
 })
-
-// deleteBookBtn.addEventListener("click", function(e) {
-//     console.log(e.target);
-// })
-
