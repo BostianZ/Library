@@ -3,11 +3,11 @@ const myLibrary = [];
 const addBookBtn = document.getElementById("addbook-btn");
 const cancelBookBtn = document.getElementById("cancel-btn");
 const modalAddBookBtn = document.getElementById("modal-addbook-btn");
+const deleteBookBtn = document.getElementById("delete-btn");
+const readBtn = document.getElementById("read-btn");
 const modal = document.querySelector("dialog");  
 const form = document.querySelector("form");
 const libraryContainer = document.getElementById("library-container");
-
-
 const bookTitle = document.getElementById("title");
 const bookAuthor = document.getElementById("author");
 const numberOfPages = document.getElementById("pages")
@@ -40,7 +40,7 @@ function renderBookList() {
     for (let i = 0; i < myLibrary.length; i++) {    
         let book = myLibrary[i];
         let card = `
-        <div class="library-card" data-id=${i}>
+        <div class="library-card">
             <div class="library-card-content">
                 <div>Book Title: ${book.title}</div>
                 <div>Book Author: ${book.author}</div>
@@ -48,15 +48,21 @@ function renderBookList() {
             </div>
             <div class="library-card-btns">
                 <button id="read-btn">Read</button>
-                <button id="delete-btn">Delete</button>
+                <button id="delete-btn" data-id=${i} onclick="deleteBook(event)">Delete</button>
             </div>
         </div>`
         libraryContainer.insertAdjacentHTML("beforeend", card)
     }
 }
 
-function deleteBook() {
-
+function deleteBook(e) {
+    // We click on the delete button
+    // We get the ID of the library card
+    let id = e.target.dataset.id
+    //Because the ID is associated with the index of the item clicked
+    //We can splice the deleted library card out of the array and re-render the list.
+    myLibrary.splice(id, 1);
+    renderBookList();
 }
 
 
@@ -79,4 +85,8 @@ cancelBookBtn.addEventListener("click", function(e) {
     e.preventDefault();
     modal.close()
 })
+
+// deleteBookBtn.addEventListener("click", function(e) {
+//     console.log(e.target);
+// })
 
