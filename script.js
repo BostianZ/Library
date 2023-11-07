@@ -1,27 +1,31 @@
 const myLibrary = [];
 
-const newBookBtn = document.getElementById("newbook-btn");
-const modalCancelBookBtn = document.getElementById("modal-cancel-btn");
+const newBookBtn = document.querySelector(".newbook-btn");
+const modalCancelBookBtn = document.querySelector(".modal-cancel-btn");
 const hasReadCheckbox = document.getElementById("read")
-const readBtn = document.getElementById("read-btn");
-
 const modal = document.querySelector("dialog");  
 const form = document.querySelector("form");
 const bookTitle = document.getElementById("title");
 const bookAuthor = document.getElementById("author");
 const numberOfPages = document.getElementById("pages")
 
-function Book(author, title, pages, hasRead) {
-    this.author = author,
+function Book(title, author, pages, hasRead) {
     this.title = title,
+    this.author = author,
     this.pages = pages,
     this.hasRead = hasRead
 }
 
-Book.prototype.read = function() {
+Book.prototype.read = function(id) {
     //Toggle book's read status (done via button)
-    //checked ? read : not read
-    this.hasRead ? this.hasRead = false : this.hasRead = true;
+    //this references book obj
+
+    this.hasRead === "Nope" ? 
+        this.hasRead = "Read" :   
+        this.hasRead = "Nope";
+
+    console.log(this);
+
     renderBookList();
 }
     
@@ -31,7 +35,7 @@ function addBookToLibrary(book) {
 }
 
 function renderBookList() {
-    const libraryContainer = document.getElementById("library-container");
+    const libraryContainer = document.querySelector(".library-container");
 
     if (libraryContainer.hasChildNodes()) {
         libraryContainer.innerHTML = "";
@@ -41,17 +45,32 @@ function renderBookList() {
         let book = myLibrary[i];
         let card = `
         <div class="library-card">
-            <div class="library-card-content">
-                <div>Book Title: ${book.title}</div>
-                <div>Book Author: ${book.author}</div>
-                <div>Number of pages: ${book.pages}</div>
-                <div>Has read this bool: ${book.hasRead}</div>
-            </div>
+            <table class="library-card-content">
+                <tbody>
+                    <tr>
+                        <td>Title:</td>
+                        <td>${book.title}</td>
+                    </tr>
+                    <tr>
+                        <td>Author:</td>
+                        <td>${book.author}</td>
+                    </tr>
+                    <tr>
+                        <td>Pages:</td>
+                        <td>${book.pages}</td>
+                    </tr>
+                    <tr>
+                        <td>Read status:</td>
+                        <td>${book.hasRead}</td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="library-card-btns">
-                <button id="read-btn" data-id=${i} onclick="readBook(event)">Read</button>
-                <button id="delete-btn" data-id=${i} onclick="deleteBook(event)">Delete</button>
+                <button class="read-btn" data-id=${i} onclick="readBook(event)">Read</button>
+                <button class="delete-btn" data-id=${i} onclick="deleteBook(event)">Delete</button>
             </div>
         </div>`
+
         libraryContainer.insertAdjacentHTML("beforeend", card)
     }
 }
@@ -69,11 +88,8 @@ function deleteBook(e) {
 function readBook(e) {
   let id = e.target.dataset.id
   let book = myLibrary[id];
-  book.read();
+  book.read(id);
 }
-
-
-
 
 ///////////////////////////////
 //////EVENT LISTENERS//////////
@@ -83,11 +99,15 @@ form.addEventListener("submit", function(e) {
     e.preventDefault();
 
     let hasRead;
-    hasReadCheckbox.checked ? hasRead = true : hasRead = false;
+
+    hasReadCheckbox.checked ? hasRead = "Read" : hasRead = "Nope";
+
     let book = new Book(bookTitle.value, bookAuthor.value, numberOfPages.value, hasRead);
+
     addBookToLibrary(book);
-    console.log(book);
+
     modal.close();
+    form.reset();
 })
 
 newBookBtn.addEventListener("click", function() {
@@ -96,5 +116,6 @@ newBookBtn.addEventListener("click", function() {
 
 modalCancelBookBtn.addEventListener("click", function(e) {
     e.preventDefault();
-    modal.close()
+    modal.close();
+    form.reset();
 })

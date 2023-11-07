@@ -15,18 +15,18 @@
                     <input type="text" placeholder="Book Title" name="title" id="title" min="8" max="32" required/>
                 </div>
                 <div>
-                    <input type="text" placeholder="Book Author" name="author" id="author" min="8" max="32"required/>
+                    <input type="text" placeholder="Book Author" name="author" id="author" min="8" max="32" required/>
                 </div>
                 <div>
-                    <input type="number" placeholder="Number of pages" min="5" max="22,000" named="pages" id="pages" required/>
+                    <input type="number" placeholder="Number of pages" min="5" max="22,000" name="pages" id="pages" required/>
                 </div>
                 <div class="have-read-wrapper">
                     <label>I have read this book</label>
                     <input type="checkbox" name="read" id="read" value="read"/>
                 </div>
                 <div>
-                    <button id="modal-addbook-btn" type="submit">Add</button>
-                    <button id="modal-cancel-btn">Cancel</button>
+                    <button class="modal-addbook-btn" type="submit">Add</button>
+                    <button class="modal-cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>
@@ -38,15 +38,16 @@
                 <h2>Your Library</h2>
             </div>
             <div>
-                <button id="newbook-btn">
+                <button class="newbook-btn">
                     New Book
                 </button>
             </div>
         </header>
-        <main id="library-container">
+        <main class="library-container">
             
         </main>
     </div>
+    <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
+
 </html>
